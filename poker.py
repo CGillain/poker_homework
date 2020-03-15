@@ -17,7 +17,6 @@ class Card(object):
     def __str__(self):
         return "%s%s" % (self.rank, self.suit)
 
-
 class Deck(object):
     def __init__(self):
         self.cards = []
@@ -106,19 +105,23 @@ class Hand(object):
                             return False
 
     def is_straight(self):
+        self.card_rank = []
         for k in range(5):
-            card_ranks = list(self.cards[k].get_rank())
-            card_ranks =[int(i) for i in card_ranks]
-            if max(card_ranks) - (min(card_ranks)+1) == 5 and max(card_ranks) != 14:
-                return True
-            else:
-                return False
+            current_rank = self.cards[k].get_rank()
+            #print(current_rank)
+            self.card_rank.append(current_rank)
+        print(self.card_rank)
+        card_ranks =[int(i) for i in self.card_rank]
+        if max(card_ranks) - (min(card_ranks)+1) == 5 and min(card_ranks) != 10:
+            return True
+        else:
+            return False
 
     def is_royal_straight(self):
         for k in range(5):
             card_ranks = list(self.cards[k].get_rank())
             card_ranks = [int(i) for i in card_ranks]
-            if max(card_ranks) - (min(card_ranks) + 1) == 5 and max(card_ranks) == 14:
+            if max(card_ranks) - (min(card_ranks) + 1) == 5 and min(card_ranks) == 10:
                 return True
             else:
                 return False
@@ -137,7 +140,7 @@ class Hand(object):
 
 
 def check_hand():
-    n = 10000         # Number of times we want to run poker hands
+    n = 2        # Number of times we want to run poker hands
     nothing = 0
     one_pair = 0
     two_pairs = 0
@@ -153,6 +156,8 @@ def check_hand():
         new_deck = Deck()
         new_deck.shuffle()
         hand = Hand(new_deck)
+        print(hand)
+
 
         if hand.is_one_pair():
             one_pair += 1
