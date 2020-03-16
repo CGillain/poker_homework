@@ -252,4 +252,5 @@ def check_hand():
     print("Probability of getting a flush is", ((flush * 100) / n))
     print("Probability of getting a royal flush is", ((royal_flush * 100) / n))
 
+
 check_hand()
