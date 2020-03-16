@@ -1,7 +1,7 @@
 import random
+
 suits = ["♠", "♥", "♦", "♣"]
 ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"]
-#ranks = list(map(int, ranks))
 
 class Card(object):
     def __init__(self, suit, rank):
@@ -61,9 +61,9 @@ class Hand(object):
             return False
 
     def is_two_pairs(self):
-        nbr_pairs=0
+        nbr_pairs = 0
         for k in range(5):
-            for l in range(k+1, 5):
+            for l in range(k + 1, 5):
                 if self.cards[k].get_rank() == self.cards[l].get_rank():
                     nbr_pairs += 1
 
@@ -74,32 +74,36 @@ class Hand(object):
 
     def is_three_same(self):
         for k in range(5):
-            for l in range(k+1, 5):
-                for m in range(l+1,5):
-                    for i in range(m+1,5):
-                        for j in range(i+1,5):
-                            if self.cards[k].get_rank() == self.cards[l].get_rank() == self.cards[m].get_rank() and self.cards[i].get_rank() != self.cards[j].get_rank():
+            for l in range(k + 1, 5):
+                for m in range(l + 1, 5):
+                    for i in range(m + 1, 5):
+                        for j in range(i + 1, 5):
+                            if self.cards[k].get_rank() == self.cards[l].get_rank() == self.cards[m].get_rank() and (
+                                    self.cards[i].get_rank() != self.cards[j].get_rank()) and (
+                                    self.cards[i].get_rank() != self.cards[k].get_rank()):
                                 return True
                             else:
                                 return False
 
     def is_full_house(self):
         for k in range(5):
-            for l in range(k+1,5):
-                for m in range(l+1,5):
-                    for i in range(m+1,5):
-                        for j in range(i+1,5):
-                            if self.cards[k].get_rank() == self.cards[l].get_rank() == self.cards[m].get_rank() and self.cards[i].get_rank() == self.cards[j].get_rank():
+            for l in range(k + 1, 5):
+                for m in range(l + 1, 5):
+                    for i in range(m + 1, 5):
+                        for j in range(i + 1, 5):
+                            if self.cards[k].get_rank() == self.cards[l].get_rank() == self.cards[m].get_rank() and \
+                                    self.cards[i].get_rank() == self.cards[j].get_rank():
                                 return True
                             else:
                                 return False
 
     def is_four_same(self):
         for k in range(5):
-            for l in range(k+1, 5):
-                for m in range(k+2, 5):
-                    for n in range(k+3, 5):
-                        if self.cards[k].get_rank() == self.cards[l].get_rank() == self.cards[m].get_rank() == self.cards[n].get_rank():
+            for l in range(k + 1, 5):
+                for m in range(k + 2, 5):
+                    for n in range(k + 3, 5):
+                        if self.cards[k].get_rank() == self.cards[l].get_rank() == self.cards[m].get_rank() == \
+                                self.cards[n].get_rank():
                             return True
                         else:
                             return False
@@ -108,39 +112,82 @@ class Hand(object):
         self.card_rank = []
         for k in range(5):
             current_rank = self.cards[k].get_rank()
-            #print(current_rank)
             self.card_rank.append(current_rank)
-        print(self.card_rank)
-        card_ranks =[int(i) for i in self.card_rank]
-        if max(card_ranks) - (min(card_ranks)+1) == 5 and min(card_ranks) != 10:
+        self.card_rank = [int(i) for i in self.card_rank]
+        self.card_rank.sort()
+        if (self.card_rank[4] - self.card_rank[3] == 1) and (self.card_rank[3] - self.card_rank[2] == 1) and (
+                self.card_rank[2] - self.card_rank[1] == 1) and (self.card_rank[1] - self.card_rank[0] == 1) and (
+                min(self.card_rank) != 10):
+
             return True
         else:
             return False
 
-    def is_royal_straight(self):
+    def is_straight_flush(self):
+        self.card_rank = []
         for k in range(5):
-            card_ranks = list(self.cards[k].get_rank())
-            card_ranks = [int(i) for i in card_ranks]
-            if max(card_ranks) - (min(card_ranks) + 1) == 5 and min(card_ranks) == 10:
-                return True
-            else:
-                return False
+            current_rank = self.cards[k].get_rank()
+            self.card_rank.append(current_rank)
+        self.card_rank = [int(i) for i in self.card_rank]
+        self.card_rank.sort()
+        if (self.card_rank[4] - self.card_rank[3] == 1) and (self.card_rank[3] - self.card_rank[2] == 1) and (
+                self.card_rank[2] - self.card_rank[1] == 1) and (self.card_rank[1] - self.card_rank[0] == 1) and (
+                min(self.card_rank) != 10):
+            for k in range(5):
+                for l in range(k + 1, 5):
+                    for m in range(l + 1, 5):
+                        for i in range(m + 1, 5):
+                            for j in range(i + 1, 5):
+                                if self.cards[k].get_suit() == self.cards[l].get_suit() == self.cards[m].get_suit() == \
+                                        self.cards[i].get_suit() == self.cards[j].get_suit():
+                                    return True
+        else:
+            return False
+
+    def is_royal_flush(self):
+        self.card_rank = []
+        for k in range(5):
+            current_rank = self.cards[k].get_rank()
+            self.card_rank.append(current_rank)
+        self.card_rank = [int(i) for i in self.card_rank]
+        self.card_rank.sort()
+        if (self.card_rank[4] - self.card_rank[3] == 1) and (self.card_rank[3] - self.card_rank[2] == 1) and (
+                self.card_rank[2] - self.card_rank[1] == 1) and (self.card_rank[1] - self.card_rank[0] == 1) and (
+                min(self.card_rank) == 10):
+            for k in range(5):
+                for l in range(k + 1, 5):
+                    for m in range(l + 1, 5):
+                        for i in range(m + 1, 5):
+                            for j in range(i + 1, 5):
+                                if self.cards[k].get_suit() == self.cards[l].get_suit() == self.cards[m].get_suit() == \
+                                        self.cards[i].get_suit() == self.cards[j].get_suit():
+                                    return True
+        else:
+            return False
 
     def is_flush(self):
+        self.card_rank = []
         for k in range(5):
-            for l in range(k+1, 5):
-                for m in range(l+1,5):
-                    for i in range(m+1,5):
-                        for j in range(i+1,5):
-                            if self.cards[k].get_suit() == self.cards[l].get_suit() == self.cards[m].get_suit() == self.cards[i].get_suit() == self.cards[j].get_suit():
-                                return True
-                            else:
-                                return False
-
+            current_rank = self.cards[k].get_rank()
+            self.card_rank.append(current_rank)
+        self.card_rank = [int(i) for i in self.card_rank]
+        self.card_rank.sort()
+        if (self.card_rank[4] - self.card_rank[3] != 1) or (self.card_rank[3] - self.card_rank[2] != 1) or (
+                self.card_rank[2] - self.card_rank[1] != 1) or (self.card_rank[1] - self.card_rank[0] != 1):
+            for k in range(5):
+                for l in range(k + 1, 5):
+                    for m in range(l + 1, 5):
+                        for i in range(m + 1, 5):
+                            for j in range(i + 1, 5):
+                                if self.cards[k].get_suit() == self.cards[l].get_suit() == self.cards[m].get_suit() == \
+                                        self.cards[i].get_suit() == self.cards[j].get_suit():
+                                    return True
+        else:
+            return False
 
 
 def check_hand():
-    n = 2        # Number of times we want to run poker hands
+    n = 10000  # Number of times we want to run poker hands
     nothing = 0
     one_pair = 0
     two_pairs = 0
@@ -156,8 +203,7 @@ def check_hand():
         new_deck = Deck()
         new_deck.shuffle()
         hand = Hand(new_deck)
-        print(hand)
-
+        # print(hand)
 
         if hand.is_one_pair():
             one_pair += 1
@@ -168,27 +214,28 @@ def check_hand():
         elif hand.is_three_same():
             three_same += 1
 
+        elif hand.is_straight():
+            straight += 1
+
+        elif hand.is_flush():
+            flush += 1
+
         elif hand.is_full_house():
             full_house += 1
 
         elif hand.is_four_same():
             four_same += 1
 
-        elif hand.is_straight():
-            straight += 1
-
-        elif hand.is_straight() and hand.is_flush():
+        elif hand.is_straight_flush():
             straight_flush += 1
 
-        elif hand.is_flush():
-            flush += 1
-
-        elif hand.is_flush() and hand.is_royal_straight():
+        elif hand.is_royal_flush():
             royal_flush += 1
 
         else:
             nothing += 1
 
+    total = one_pair + two_pairs + three_same + straight + flush + full_house + four_same + straight_flush + royal_flush + nothing
 
     print("Got Nothing", nothing, "times.")
     print("Got one pair", one_pair, "times.")
@@ -200,6 +247,7 @@ def check_hand():
     print("Got straight flush", straight_flush, "times.")
     print("Got flush", flush, "times.")
     print("Got royal flush", royal_flush, "times.")
+    # print("Total", total)
 
     print("Probability of getting nothing is", ((nothing*100)/n))
     print("Probability of getting 1 pair is", ((one_pair*100)/n))
@@ -213,8 +261,3 @@ def check_hand():
     print("Probability of getting a royal flush is", ((royal_flush * 100) / n))
 
 check_hand()
-
-
-
-
-
